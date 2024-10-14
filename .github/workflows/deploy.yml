@@ -40,7 +40,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             sudo mkdir -p nodejs-ec2
-            sudo chown -R ${{ secrets.EC2_USERNAME }}:${{ secrets.EC2_USERNAME }} /nodejs-ec2
+            sudo chown -R ${{ secrets.EC2_USERNAME }}:${{ secrets.EC2_USERNAME }} nodejs-ec2
 
       - name: Deploy to EC2
         uses: appleboy/scp-action@master

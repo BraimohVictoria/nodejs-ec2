@@ -30,7 +30,7 @@ jobs:
           script: |
             echo "SSH connection successful"
             whoami
-            ls -la /nodejs-ec2
+            ls -la nodejs-ec2
 
       - name: Create target directory
         uses: appleboy/ssh-action@master
@@ -39,7 +39,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo mkdir -p /nodejs-ec2
+            sudo mkdir -p nodejs-ec2
             sudo chown -R ${{ secrets.EC2_USERNAME }}:${{ secrets.EC2_USERNAME }} /nodejs-ec2
 
       - name: Deploy to EC2
@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: ".,!.git,!node_modules"
-          target: /nodejs-ec2
+          target: nodejs-ec2
           strip_components: 1
           overwrite: true
 

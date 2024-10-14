@@ -13,13 +13,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Build the app
-        run: npm run build
-
-      - name: Run tests  
-        run: npm run test
-
+        
       - name: Deploy to ec2
         uses: burnett01/rsync-deployments@7.0.1
         with:

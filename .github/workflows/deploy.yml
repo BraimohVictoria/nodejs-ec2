@@ -17,11 +17,11 @@ jobs:
       - name: Build the app
         run: npm run build
 
-      - name: Run tests
+      - name: Run tests  
         run: npm run test
 
       - name: Deploy to ec2
-        uses: burnett01/rsync-deployments@5.1
+        uses: burnett01/rsync-deploymevnts@5.1
         with:
           switches: -avzr --delete
           path: ./*

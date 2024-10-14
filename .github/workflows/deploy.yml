@@ -39,8 +39,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo mkdir -p /var/www/backend/User-backend-api
-            sudo chown -R ${{ secrets.EC2_USERNAME }}:${{ secrets.EC2_USERNAME }} /var/www/backend/User-backend-api
+            sudo mkdir -p /nodejs-ec2
+            sudo chown -R ${{ secrets.EC2_USERNAME }}:${{ secrets.EC2_USERNAME }} /nodejs-ec2
 
       - name: Deploy to EC2
         uses: appleboy/scp-action@master
@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: ".,!.git,!node_modules"
-          target: /var/www/backend/User-backend-api
+          target: /nodejs-ec2
           strip_components: 1
           overwrite: true
 
@@ -64,7 +64,7 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
             export PATH="$NVM_DIR/versions/node/v18.19.0/bin:$PATH"
-            cd /var/www/backend/User-backend-api
+            cd /nodejs-ec2
             npm install
             pm2 delete quikout-backend || true
-            pm2 start src/index.js --name quikout-backend
+            pm2 start index.js --name quikout-backend

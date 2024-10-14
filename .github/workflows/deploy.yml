@@ -64,7 +64,7 @@ jobs:
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
             export PATH="$NVM_DIR/versions/node/v18.19.0/bin:$PATH"
-            cd /nodejs-ec2
+            cd nodejs-ec2
             npm install
             pm2 delete quikout-backend || true
             pm2 start index.js --name quikout-backend

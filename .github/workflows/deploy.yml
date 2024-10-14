@@ -66,5 +66,5 @@ jobs:
             export PATH="$NVM_DIR/versions/node/v18.19.0/bin:$PATH"
             cd nodejs-ec2
             npm install
-            pm2 delete quikout-backend || true
-            pm2 start index.js --name quikout-backend
+            pm2 delete nodejs-ec2 || true
+            pm2 start index.js --name nodejs-ec2

@@ -1,4 +1,4 @@
-name: Build and Push to ECR
+name: Build and Push Image to ECR
 
 on:
     push:
@@ -7,8 +7,8 @@ on:
         branches: [ "main" ]
 
 env:
-    AWS_REGION: ap-south-1    # Mumbai region
-    ECR_REPOSITORY: myfirstrepo
+    AWS_REGION: eu-west-1    # Ireland region
+    ECR_REPOSITORY: makirepo
 
 permissions:
     contents: read    # Required for OIDC authentication

@@ -46,27 +46,31 @@ jobs:
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
                 
-            - name: Download and Upload Environment Variable file to S3
+            - name: Install AWS CLI
               run: |
-                  sudo apt update -y
-                  sudo apt install awscli jq -y
-                  # Download .env file
-                  chmod +x get_env.sh
-                  bash get_env.sh
-                  # Upload .env file to S3
-                  aws s3 cp .env s3://${{ env.S3_ENV_BUCKET }}
+                    sudo apt-get update
+                    sudo apt-get install -y awscli
                 
+            - name: Download Environment Variable File
+              run: |
+                    chmod +x get_env.sh
+                    bash get_env.sh
+                
+            - name: Upload Environment Variable to S3
+              run: |
+                    aws s3 cp .env s3://${{ env.S3_ENV_BUCKET }}
+
             - name: Download the API task definition
               id: download-api-taskdef
               run: |
-                aws ecs describe-task-definition \
+                    aws ecs describe-task-definition \
                     --task-definition ${{ secrets.ECS_TASK_DEFINITION_FAMILY }} \
                     --query taskDefinition > task-definition.json
 
             - name: Download Worker task definition
               id: download-worker-taskdef
               run: |
-                aws ecs describe-task-definition \
+                    aws ecs describe-task-definition \
                     --task-definition ${{ secrets.WORKER_TASK_DEFINITION_FAMILY }} \
                     --query taskDefinition > worker-task-definition.json
 

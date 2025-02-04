@@ -19,7 +19,7 @@ permissions:
 jobs:
     build:
         name: Build and Push
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
 
         steps:
             - name: Checkout code
@@ -46,20 +46,16 @@ jobs:
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
                 
-            - name: Install AWS CLI
-              run: |
-                    sudo apt-get update
-                    sudo apt-get install -y awscli
-                
-            - name: Download Environment Variable File
-              run: |
-                    chmod +x get_env.sh
-                    bash get_env.sh
-                
-            - name: Upload Environment Variable to S3
-              run: |
-                    aws s3 cp .env s3://${{ env.S3_ENV_BUCKET }}
-
+                  - name: Download and Upload Environment Variable file to S3
+                  run: |
+                      sudo apt update -y
+                      sudo apt install awscli jq -y
+                      # Download .env file
+                      chmod +x get_env.sh
+                      bash get_env.sh
+                      # Upload .env file to S3
+                      aws s3 cp .env s3://${{ env.S3_ENV_BUCKET }}
+    
             - name: Download the API task definition
               id: download-api-taskdef
               run: |

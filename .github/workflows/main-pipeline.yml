@@ -54,8 +54,7 @@ jobs:
                 chmod +x get_env.sh
                 bash get_env.sh
                 # Upload .env file to S3
-                mv .env.txt .env
-                aws s3 cp .env s3://${{ secrets.S3_ENV_BUCKET }}
+                aws s3 cp .env s3://${{ secrets.S3_ENV_BUCKET }}/.env
     
             - name: Download the API task definition
               id: download-api-taskdef

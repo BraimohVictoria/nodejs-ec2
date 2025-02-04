@@ -62,6 +62,12 @@ jobs:
                     aws ecs describe-task-definition \
                     --task-definition ${{ secrets.ECS_TASK_DEFINITION_FAMILY }} \
                     --query taskDefinition > task-definition.json
+                    
+            - name: Clean up task definition (remove enableFaultInjection)
+              run: |
+                      jq 'del(.taskDefinition.enableFaultInjection)' task-definition.json > cleaned-task-definition.json
+                      mv cleaned-task-definition.json task-definition.json
+                  
 
             - name: Download Worker task definition
               id: download-worker-taskdef
@@ -70,6 +76,11 @@ jobs:
                     --task-definition ${{ secrets.WORKER_TASK_DEFINITION_FAMILY }} \
                     --query taskDefinition > worker-task-definition.json
 
+            - name: Clean up task definition (remove enableFaultInjection)
+              run: |
+                      jq 'del(.taskDefinition.enableFaultInjection)' task-definition.json > cleaned-task-definition.json
+                      mv cleaned-task-definition.json task-definition.json
+                  
             - name: Update API task definition
               uses: aws-actions/amazon-ecs-render-task-definition@v1
               id: render-api-taskdef

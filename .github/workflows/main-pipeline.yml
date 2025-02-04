@@ -93,7 +93,7 @@ jobs:
                 service: ${{ secrets.ECS_SERVICE }}
                 cluster: ${{ secrets.ECS_CLUSTER }}
                 wait-for-service-stability: true
-                wait-for-service-stability-timeout: 600
+                wait-for-minutes: 10  # You can adjust the minutes as needed
                 force-new-deployment: true
 
             - name: Deploy Worker to ECS

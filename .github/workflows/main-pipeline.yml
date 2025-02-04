@@ -2,13 +2,13 @@ name: Build and Push Image to ECR
 
 on:
     push:
-        branches: [ "staging" ]
+        branches: [ "main" ]
     pull_request:
-        branches: [ "staging" ]
+        branches: [ "main" ]
 
 env:
     AWS_REGION: eu-west-1   # Ireland region
-    ECR_REPOSITORY: makifaa/staging
+    ECR_REPOSITORY: makirepo
     S3_ENV_BUCKET: ${{ secrets.S3_ENV_BUCKET }}
    # ECR_REGISTRY: ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
@@ -56,7 +56,7 @@ jobs:
                   # Upload .env file to S3
                   aws s3 cp .env s3://${{ env.S3_ENV_BUCKET }}
                 
-            - name: Download API task definition
+            - name: Download the API task definition
               id: download-api-taskdef
               run: |
                 aws ecs describe-task-definition \

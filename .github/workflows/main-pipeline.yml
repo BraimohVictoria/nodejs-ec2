@@ -54,7 +54,7 @@ jobs:
                   IMAGE_TAG=dev-$(echo $IMAGE_TAG | cut -c 1-8)
                   docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-                  echo "::set-output name=image_uri::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+                  echo "image_uri=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
     
             - name: Download the API task definition
               id: download-api-taskdef
@@ -76,7 +76,7 @@ jobs:
               with:
                 task-definition: task-definition.json
                 container-name: ${{ secrets.CONTAINER_NAME }}
-                image: ${{ steps.build.outputs.image_uri }}
+                image: ${{ env.image_uri }}  # Use image_uri from the environment
 
             - name: Update Worker task definition
               uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -84,7 +84,7 @@ jobs:
               with:
                 task-definition: worker-task-definition.json
                 container-name: ${{ secrets.WORKER_CONTAINER_NAME }}
-                image: ${{ steps.build.outputs.image_uri }}
+                image: ${{ env.image_uri }}  # Use image_uri from the environment
 
             - name: Deploy API to ECS
               uses: aws-actions/amazon-ecs-deploy-task-definition@v1

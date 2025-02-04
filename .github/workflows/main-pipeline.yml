@@ -35,17 +35,7 @@ jobs:
             - name: Login to Amazon ECR
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v2
-              
-            - name: Build, tag, and push image to Amazon ECR
-              env:
-                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                  IMAGE_TAG: ${{ github.sha }}
-              run: |
-                  IMAGE_TAG=dev-$(echo $IMAGE_TAG | cut -c 1-8)
-                  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-                
             - name: Download and Upload Environment Variable file to S3
               run: |
                 sudo apt update -y
@@ -55,6 +45,15 @@ jobs:
                 bash get_env.sh
                 # Upload .env file to S3
                 aws s3 cp .env s3://${{ secrets.S3_ENV_BUCKET }}
+              
+            - name: Build, tag, and push image to Amazon ECR
+              env:
+                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                  IMAGE_TAG: ${{ github.sha }}
+              run: |
+                  IMAGE_TAG=dev-$(echo $IMAGE_TAG | cut -c 1-8)
+                  docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
     
             - name: Download the API task definition
               id: download-api-taskdef
